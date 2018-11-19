@@ -1,10 +1,16 @@
 #include <iostream>
 #include <random>
 
+//population - qtd x, qtd y,
+
+//bird
+
 //Classe Sobre o Gavião
 class Gaviao
 {
+  // ~Gaviao() { energia_gaviao = 0; }
    public:
+   Gaviao(): energia_gaviao(100){}
 	 int qnt_gaviao = 5000;    	  //Quantidade de gaviões
 	 int energia_gaviao = 100;	 //Energia dos Gaviões
 	 int attack_gaviao = 50; 	//Força de Ataque dos Gaviões
@@ -13,7 +19,9 @@ class Gaviao
 //Classe Sobre o Pombo
 class Pombo
 {
+  // ~Pombo() { energia_pombo = 0; }
    public:
+   Pombo(): energia_pombo(100){}
    int qnt_pombo = 5000;      //Quantidade de Pombo
    int energia_pombo = 100;  //Energia dos Pombos
    int run_pombo = 10;      //Corrida dos Pombos
@@ -25,7 +33,7 @@ int randomico()
   std::random_device rd;
   std::mt19937_64 gen(rd());
   std::uniform_int_distribution <unsigned long long> dis;
-  return (dis(gen)%10);
+  return (dis(gen)%2);
 }
 
 
@@ -33,50 +41,51 @@ int randomico()
 int fight(Gaviao a, Pombo b)
 {
   srand(time(NULL));
-  
+
   //Enquanto eles tiverem energia eles Lutam entre si
-  
+
   while(b.energia_pombo >= 0 or a.energia_gaviao >= 0)
   {
     int rodada = 0;
     auto resultado = randomico();
-    
+    std::cout << "resultado: " << resultado << '\n';
+
     //caso o rand seja par ocorre do ataque do gavião
-    if(resultado % 2 == 0)
+    if(resultado == 0)
     {
       //ANALISAR
       //Existe a possibilidade de ataque critico
       //float res = randomico();
-   
+
       //Caso res seja maior ou igual a 4 o ataque é critico
       //if(res >= 4)
       //{
        //a.energia_gaviao -= 50;
        //b.energia_pombo -= 100;
       //}
-      
+
       //Caso não satisfaça a condição acima o ataque é normal
       //else
       //{
-      
+
       //FIM ANALISE
 
-      a.energia_gaviao -= 50;
+      // a.energia_gaviao -= 50;
       b.energia_pombo -= 100;
       //}
     }
-      
+
     //Caso o gavião não conecte o ataque o pombo foge
     else
     {
-      a.energia_gaviao -= 50;
+      // a.energia_gaviao -= 50;
       b.energia_pombo -= 10;
     }
-    
+
     //Ao fim de cada ataque/ataque ocorre a perca de energia pelo tempo no ar
-    a.energia_gaviao -= 10;
-    b.energia_pombo -= 10;
-    
+    // a.energia_gaviao -= 10;
+    // b.energia_pombo -= 10;
+
 
     //Se o Gavião Ficar Sem Energia ele perde a rodada
     if(a.energia_gaviao <= 0)
@@ -85,7 +94,7 @@ int fight(Gaviao a, Pombo b)
       a.energia_gaviao = 100;
       b.energia_pombo = 100;
     }
-    
+
     //Se o Pombo Ficar Sem Energia ele perde a rodada
     if(b.energia_pombo <= 0)
     {
@@ -93,7 +102,7 @@ int fight(Gaviao a, Pombo b)
       a.energia_gaviao = 100;
       b.energia_pombo = 100;
     }
-    
+
     //Condição do Fim da Luta
     if (a.qnt_gaviao < 1000)
     {
@@ -101,7 +110,7 @@ int fight(Gaviao a, Pombo b)
      //std::cout << "Gaviao perdeu a geração\n";
      return 1;
     }
-    
+
     //Condição do Fim da Luta
     if(b.qnt_pombo < 1000)
     {
@@ -112,28 +121,52 @@ int fight(Gaviao a, Pombo b)
   }
 }
 
+// int randomico()
+// {
+//   std::random_device rd;
+//   std::mt19937_64 gen(rd());
+//   std::uniform_int_distribution <unsigned long long> dis;
+//   return (dis(gen)%500);
+// }
 
 int main()
 {
-	Gaviao a;
-	Pombo b;
-    
-    int vit_pombo = 0;
-    int vit_gaviao = 0;
-    
-    for (int i = 0; i < 500; ++i)
-    {
-     	if(fight(a, b) == 1);
-     	vit_gaviao++;
 
-     	if(fight(a,b) == 2)
-     	vit_pombo++;
+    std::vector<Pombo> p;
+    std::vector<Gaviao> g;
 
-        std::cout << "Round "<<  i << std::endl;
+    for (size_t i = 0; i < 500; i++) {
+      Pombo a;
+      a.energia_pombo = i;
+      p.push_back(a);
     }
 
-    std::cout << "Vitorias: Pombo " << vit_pombo << " Vitorias: GAVIAO " << 500 - vit_pombo;
-    std::cout << std::endl; 
+    for (int i = 0; i < p.size(); ++i) {
+      std::cout << p[i].energia_pombo << '\n';
+    }
+
+
+
+
+    //vitorias
+    // int vit_pombo = 0;
+    // int vit_gaviao = 0;
+    //
+    // for (int i = 0; i < 10; ++i)
+    // {
+    //   //vitoria gavião
+    //  	if(fight(a, b) == 1){
+    //     vit_gaviao++;
+    //   }else{
+    //     vit_pombo++;
+    //   }
+    //
+    //
+    //     std::cout << "Round "<<  i << std::endl;
+    // }
+    //
+    // std::cout << "Vitorias: Pombo " << vit_pombo << " Vitorias: GAVIAO " << 500 - vit_pombo;
+    // std::cout << std::endl;
 
 	return 0;
 }
